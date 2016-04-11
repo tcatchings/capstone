@@ -2,6 +2,10 @@
 # Brandon Randle 2016 February 10
 # Last Update 2016 February 11
 # A script to play with threaded servers.
+'''
+This module hosts a threaded server, where the Server object creates new Client objects that
+run on their own threads.
+'''
 
 import select
 import socket
