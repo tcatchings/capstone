@@ -1,10 +1,11 @@
 #!/usr/bin/python3.4
 # Brandon Randle 2016 February 12
-# Last Update 2016 April 11
+# Last Update 2016 April 13
 # A program for playing with game elements.
 
 import logging
-logging.basicConfig(filename='gamelog.log', filemode='w', level=logging.DEBUG)
+
+logging.basicConfig(filename='gamelog.log', level=logging.DEBUG)
 
 class Player:
     def __init__(self):
