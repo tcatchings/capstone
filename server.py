@@ -12,10 +12,12 @@ import socket
 import sys
 import threading
 
+port = int(sys.argv[1])
+
 class Server:
     def __init__(self):
         self.host = ''
-        self.port = 4321
+        self.port = port
         self.backlog = 5
         self.size = 1024
         self.server = None
@@ -56,7 +58,7 @@ class Server:
         for c in self.threads:
             c.join()
 
-    def broadcast(self, message):
+    def broadcast(self, message, client):
         for socket in self.threads:
             if socket != self.server and socket != sys.stdin:
                 try:
@@ -74,13 +76,14 @@ class Client(threading.Thread):
         self.address = address
         self.server = server
         self.size = 1024
+        self.name = str(address)
 
     def run(self):
         running = 1
         while running:
             data = self.client.recv(self.size)
             if data:
-                self.server.broadcast(data)
+                self.server.broadcast(data, self.client)
                 print("Data Received: " + str(data.decode('ascii')))
             else:
                 self.client.close()
