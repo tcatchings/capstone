@@ -100,13 +100,27 @@ class Client(threading.Thread):
         running = 1
         while running:
             data = self.client.recv(self.size)
+            data = self.parser(data)
             if data:
-                self.server.broadcast(data, self.client)
-                print("Data Received: " + str(data.decode('ascii')))
+                #self.server.broadcast(data.encode(), self.client)
+                self.interpreter(data)
+                print("Data Received: " + data)
             else:
                 self.client.close()
                 print("Client closed: " + str(self.address))
                 running = 0
+
+    def interpreter(self, data):
+        if data == 'hello': 
+            self.server.broadcast('greetings earthling'.encode(), self.client)
+        else:
+            self.server.broadcast(data.encode(), self.client)
+
+    def parser(self, data):
+        data = str(data.decode('ascii'))
+        data = data.split()
+        data = data[0]
+        return data
 
 if __name__ == "__main__":
     s = Server()
