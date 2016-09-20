@@ -86,6 +86,15 @@ class Server:
                     if socket in self.threads:
                         self.threads.remove(socket)
 
+    def message(self, message, client):
+        ''' This method sends a message to only the client specified. '''
+        message = message + '\n'
+        try:
+            client.send(message.encode())
+        except:
+            client.close()
+            if client in self.threads:
+                self.threads.remove(client)
 
 class Client(threading.Thread):
     def __init__(self,client,address,server):
@@ -112,9 +121,9 @@ class Client(threading.Thread):
 
     def interpreter(self, data):
         if data == 'hello': 
-            self.server.broadcast('greetings earthling', self.client)
+            self.server.message('greetings earthling', self.client)
         elif data == 'quit':
-            self.server.broadcast('farewell', self.client)
+            self.server.message('farewell', self.client)
             self.client.close()
             print("Client closed: " + str(self.address))
         else:
