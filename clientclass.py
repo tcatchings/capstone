@@ -16,7 +16,7 @@ class Client(threading.Thread):
         self.server = server
         self.size = 1024
         self.name = str(address)
-        self.commands = {'hello': self.greetEarthling, 'quit': self.quit}
+        self.commands = {'hello': self.greetEarthling, 'quit': self.quit, 'setname': self.setName}
 
     def run(self):
         ''' This method runs the client connection loop. '''
@@ -27,7 +27,7 @@ class Client(threading.Thread):
 
             if data:
                 self.interpreter(data)
-                print("Data received from " + self.name + " : " + data)
+                print("Data received from " + self.name + " : ".join(data))
             else:
                 self.client.close()
                 print("Client closed: " + str(self.address))
@@ -39,18 +39,25 @@ class Client(threading.Thread):
             in the command dictionary, it is executed. Otherwise, the data is broadcast
             to all connected clients.
         '''
-
-        if data in self.commands:
-            self.commands[data]()
+        command = data[0]
+        if len(data) > 1:
+            argument = data[1]
         else:
-            self.server.broadcast(data, self.client)
+            argument = None
+
+        if command in self.commands:
+            if argument:
+                self.commands[command](argument)
+            else:
+                self.commands[command]()
+        else:
+            self.server.broadcast(''.join(data), self.client)
 
     def parser(self, data):
         ''' This method parses the data received from the clent into interpretable strings. '''
 
         data = str(data.decode('ascii'))
         data = data.split()
-        data = data[0]
         return data
 
     # CLIENT COMMANDS
@@ -66,6 +73,10 @@ class Client(threading.Thread):
         self.server.broadcast(self.name + ' disconnected.', self.client)
         self.client.close()
         print("Client closed: " + str(self.address))
+
+    def setName(self, name):
+        self.name = name
+        self.server.message('Name set to: ' + name, self.client)
 
 if __name__ == '__main__':
     print("This is not an exectuable program. Please run server.py instead.")

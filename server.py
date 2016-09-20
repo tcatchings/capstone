@@ -1,7 +1,6 @@
 #!/usr/bin/python3.5
 # Brandon Randle 2016 February 10
-# Last Update 2016 September 13 
-# A script to play with threaded servers.
+# Last Update 2016 September 20 
 '''
 This module hosts a threaded server, where the Server object creates new Client objects that
 run on their own threads.
