@@ -11,6 +11,7 @@ import select
 import socket
 import sys
 import threading
+from clientclass import Client
 
 class Server:
     def __init__(self):
@@ -95,45 +96,6 @@ class Server:
             client.close()
             if client in self.threads:
                 self.threads.remove(client)
-
-class Client(threading.Thread):
-    def __init__(self,client,address,server):
-        threading.Thread.__init__(self)
-        self.client = client
-        self.address = address
-        self.server = server
-        self.size = 1024
-        self.name = str(address)
-
-    def run(self):
-        ''' This method runs the client connection loop. It will close the client socket when it detects no incoming data. '''
-        running = 1
-        while running:
-            data = self.client.recv(self.size)
-            data = self.parser(data)
-            if data:
-                self.interpreter(data)
-                print("Data Received: " + data)
-            else:
-                self.client.close()
-                print("Client closed: " + str(self.address))
-                running = 0
-
-    def interpreter(self, data):
-        if data == 'hello': 
-            self.server.message('greetings earthling', self.client)
-        elif data == 'quit':
-            self.server.message('farewell', self.client)
-            self.client.close()
-            print("Client closed: " + str(self.address))
-        else:
-            self.server.broadcast(data, self.client)
-
-    def parser(self, data):
-        data = str(data.decode('ascii'))
-        data = data.split()
-        data = data[0]
-        return data
 
 if __name__ == "__main__":
     s = Server()
