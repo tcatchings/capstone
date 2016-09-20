@@ -24,25 +24,25 @@ class Client(threading.Thread):
         self.server.message('Please use SETNAME <yourname> to set a username.', self.client)
         while running:
             data = self.client.recv(self.size)
-            data = self.parser(data)
+            data, dataparsed = self.parser(data)
 
             if data:
-                self.interpreter(data)
-                print("Data received from " + self.name + " : ".join(data))
+                self.interpreter(data, dataparsed)
+                print("Data received from " + self.name + data)
             else:
                 self.client.close()
                 print("Client closed: " + str(self.address))
-                self.server.broadcast(self.name + ' disconnected.', self.client)
+                self.server.broadcast(self.name + ' disconnected.', self.client, self.name)
                 running = 0
 
-    def interpreter(self, data):
+    def interpreter(self, data, dataparsed):
         ''' This method interprets commands sent from the client. If a match is found
             in the command dictionary, it is executed. Otherwise, the data is broadcast
             to all connected clients.
         '''
-        command = data[0]
-        if len(data) > 1:
-            argument = data[1]
+        command = dataparsed[0]
+        if len(dataparsed) > 1:
+            argument = dataparsed[1]
         else:
             argument = None
 
@@ -52,15 +52,15 @@ class Client(threading.Thread):
             else:
                 self.commands[command]()
         else:
-            self.server.broadcast(''.join(data), self.client)
+            self.server.broadcast(data, self.client, self.name)
 
     def parser(self, data):
         ''' This method parses the data received from the clent into interpretable strings. '''
 
         data = str(data.decode('ascii'))
-        data = data.lower()
-        data = data.split()
-        return data
+        dataparsed = data.lower()
+        dataparsed = dataparsed.split()
+        return data, dataparsed
 
     # CLIENT COMMANDS
 
@@ -72,7 +72,7 @@ class Client(threading.Thread):
         ''' This method disconnects the client and notifies the server and connected clients. '''
 
         self.server.message('Farewell!', self.client)
-        self.server.broadcast(self.name + ' disconnected.', self.client)
+        self.server.broadcast(self.name + ' disconnected.', self.client, self.name)
         self.client.close()
         print("Client closed: " + str(self.address))
 

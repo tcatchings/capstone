@@ -74,9 +74,9 @@ class Server:
         for c in self.threads:
             c.join()
 
-    def broadcast(self, message, client):
+    def broadcast(self, message, client, clientname):
         ''' This method broadcasts a message to all clients currently connected. '''
-        message = message + '\n>' #Adds a newline to every message sent to client.
+        message = clientname + " : " + message + '\n>' #Adds a newline to every message sent to client.
         for socket in self.threads:
             if socket != self.server and socket != sys.stdin:
                 try:
