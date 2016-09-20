@@ -76,10 +76,11 @@ class Server:
 
     def broadcast(self, message, client):
         ''' This method broadcasts a message to all clients currently connected. '''
+        message = message + '\n' #Adds a newline to every message sent to client.
         for socket in self.threads:
             if socket != self.server and socket != sys.stdin:
                 try:
-                    socket.client.send(message)
+                    socket.client.send(message.encode())
                 except:
                     socket.client.close()
                     if socket in self.threads:
@@ -102,7 +103,6 @@ class Client(threading.Thread):
             data = self.client.recv(self.size)
             data = self.parser(data)
             if data:
-                #self.server.broadcast(data.encode(), self.client)
                 self.interpreter(data)
                 print("Data Received: " + data)
             else:
@@ -112,9 +112,13 @@ class Client(threading.Thread):
 
     def interpreter(self, data):
         if data == 'hello': 
-            self.server.broadcast('greetings earthling'.encode(), self.client)
+            self.server.broadcast('greetings earthling', self.client)
+        elif data == 'quit':
+            self.server.broadcast('farewell', self.client)
+            self.client.close()
+            print("Client closed: " + str(self.address))
         else:
-            self.server.broadcast(data.encode(), self.client)
+            self.server.broadcast(data, self.client)
 
     def parser(self, data):
         data = str(data.decode('ascii'))
