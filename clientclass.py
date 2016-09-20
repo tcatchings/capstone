@@ -21,6 +21,7 @@ class Client(threading.Thread):
     def run(self):
         ''' This method runs the client connection loop. '''
         running = 1
+        self.server.message('Please use SETNAME <yourname> to set a username.', self.client)
         while running:
             data = self.client.recv(self.size)
             data = self.parser(data)
@@ -57,6 +58,7 @@ class Client(threading.Thread):
         ''' This method parses the data received from the clent into interpretable strings. '''
 
         data = str(data.decode('ascii'))
+        data = data.lower()
         data = data.split()
         return data
 
