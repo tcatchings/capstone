@@ -76,7 +76,7 @@ class Server:
 
     def broadcast(self, message, client):
         ''' This method broadcasts a message to all clients currently connected. '''
-        message = message + '\n' #Adds a newline to every message sent to client.
+        message = message + '\n>' #Adds a newline to every message sent to client.
         for socket in self.threads:
             if socket != self.server and socket != sys.stdin:
                 try:
