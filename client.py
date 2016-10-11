@@ -1,6 +1,6 @@
 #!/usr/bin/python3.5
 # Brandon Randle 2016 September 20
-# Last Update 2016 September 20
+# Last Update 2016 September 22
 ''' This module contains the Client class. '''
 
 import threading
