@@ -1,6 +1,6 @@
 #!/usr/bin/python3.5
 # Brandon Randle 2016 February 10
-# Last Update 2016 September 20 
+# Last Update 2016 October 11
 '''
 This module hosts a threaded server, where the Server object creates new Client objects that
 run on their own threads.
@@ -10,7 +10,7 @@ import select
 import socket
 import sys
 import threading
-from clientclass import Client
+from client import Client
 
 class Server:
     def __init__(self):
@@ -76,7 +76,7 @@ class Server:
 
     def broadcast(self, message, client, clientname):
         ''' This method broadcasts a message to all clients currently connected. '''
-        message = clientname + " : " + message + '\n>' #Adds a newline to every message sent to client.
+        message = "\n" +clientname + ": " + message + '\n>' #Adds a newline to every message sent to client.
         for socket in self.threads:
             if socket != self.server and socket != sys.stdin:
                 try:
