@@ -131,7 +131,6 @@ class Client(threading.Thread):
         ''' This method runs the client connection loop. '''
 
         running = 1
-        self.server.message('Please use SETNAME <yourname> to set a username.', self.client, self.name)
         while running:
             data = self.client.recv(self.size)
             data = data.decode()
