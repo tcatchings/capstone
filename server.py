@@ -14,6 +14,7 @@ import re
 import logging
 import bcrypt
 import yaml
+import location
 
 logging.basicConfig(filename='log.log', level=logging.DEBUG)
 
@@ -26,6 +27,7 @@ class Server:
         self.server = None
         self.threads = []
         self.users = self.loadUsers()
+        self.worldmap = self.loadMap()
 
     def setport(self):
         ''' This method sets a default port if a port is not provided on the command line.'''
@@ -125,6 +127,22 @@ class Server:
         with open('users.yaml', 'w') as users:
             yaml.dump(self.users, users, default_flow_style=False)
 
+    def loadMap(self):
+        return [
+                [None, location.MapTile_Plain(1,0), None],
+                [None, location.MapTile_Plain(1,1), None],
+                [location.MapTile_Plain(0,2), location.MapTile_Plain(1,2), location.MapTile_Plain(2,2)],
+                [None, location.MapTile_Plain(1,3), None]
+        ]
+
+    def tileAt(self, x, y):
+        if x < 0 or y < 0:
+            return None
+        try:
+            return self.worldmap[y][x]
+        except IndexError:
+            return None
+
 
 # CLIENT CLASS
 
@@ -139,8 +157,33 @@ class Client(threading.Thread):
         self.server = server
         self.size = 1024
         self.name = str(address)
-        self.commandlist = {'say': self.say, 'quit': self.quit}
+        self.commandlist = {
+            'say': self.say, 
+            'quit': self.quit, 
+            'north': self.move_north, 
+            'south': self.move_south, 
+            'east': self.move_east, 
+            'west': self.move_west
+        }
         self.running = True
+        self.x = 1
+        self.y = 2
+
+    def move(self, dx, dy):
+        self.x += dx
+        self.y += dy
+
+    def move_north(self):
+        self.move(dx=0, dy=-1)
+
+    def move_south(self):
+        self.move(dx=0, dy=1)
+
+    def move_east(self):
+        self.move(dx=1, dy=0)
+
+    def move_west(self):
+        self.move(dx=-1, dy=0)
 
 
     def run(self):
@@ -149,6 +192,8 @@ class Client(threading.Thread):
         self.loginPrompt()
 
         while self.running:
+            room = self.server.tileAt(self.x, self.y)
+            self.server.message(room.intro_text(), self.client, self.name)
             data = self.receiveData()
 
             if data:
