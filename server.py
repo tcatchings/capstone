@@ -13,6 +13,7 @@ import threading
 import re
 import logging
 import bcrypt
+import yaml
 
 logging.basicConfig(filename='log.log', level=logging.DEBUG)
 
@@ -24,6 +25,7 @@ class Server:
         self.size = 1024
         self.server = None
         self.threads = []
+        self.users = self.loadUsers()
 
     def setport(self):
         ''' This method sets a default port if a port is not provided on the command line.'''
@@ -74,6 +76,7 @@ class Server:
                     logging.info('New client connected: ' + str(c.address))
                 elif s == sys.stdin:
                     logging.info('Server shutdown request received from server. Shutting down once all clients disconnect.')
+                    self.saveUsers()
                     junk = sys.stdin.readline()
                     running = 0
 
@@ -112,6 +115,17 @@ class Server:
             if client in self.threads:
                 self.threads.remove(client)
 
+    def loadUsers(self):
+        with open('users.yaml', 'r') as users:
+            userdict = yaml.load(users)
+            print("Users loaded: " + str(userdict))
+        return userdict
+
+    def saveUsers(self):
+        with open('users.yaml', 'w') as users:
+            yaml.dump(self.users, users, default_flow_style=False)
+
+
 # CLIENT CLASS
 
 class Client(threading.Thread):
@@ -125,8 +139,8 @@ class Client(threading.Thread):
         self.server = server
         self.size = 1024
         self.name = str(address)
-        self.commandlist = {'say': self.say}
-        self.users = self.loadUsers()
+        self.commandlist = {'say': self.say, 'quit': self.quit}
+        self.running = True
 
 
     def run(self):
@@ -134,8 +148,7 @@ class Client(threading.Thread):
 
         self.loginPrompt()
 
-        running = 1
-        while running:
+        while self.running:
             data = self.receiveData()
 
             if data:
@@ -151,12 +164,16 @@ class Client(threading.Thread):
     def interpreter(self, data):
 
         for command in self.commandlist:
-            commandinput = r'^(' + command + r') (.*)'
+            commandinput = r'^(' + command + r')(.*)'
             # Question...weird results with setname() with (.*) matching...
             matchObj = re.match(commandinput, data)
             if matchObj:
-                self.commandlist[command](matchObj.group(2))
-                break
+                if matchObj.group(2):
+                    self.commandlist[command](matchObj.group(2))
+                    break
+                else:
+                    self.commandlist[command]()
+                    break
         if matchObj == None:
             self.server.message("There is no such command. ", self.client, self.name)
 
@@ -167,11 +184,11 @@ class Client(threading.Thread):
             self.server.message('Please enter your username: ', self.client, self.name)
             username = self.receiveData()
             pattern = r'' + username 
-            if [key for key, value in self.users.items() if re.search(pattern, key)]: 
+            if [key for key, value in self.server.users.items() if re.search(pattern, key)]: 
                 while password_running:
                     self.server.message('Password: ', self.client, self.name)
                     password = self.receiveData()
-                    if password == self.users[username]:
+                    if bcrypt.checkpw(password, self.server.users[username]):
                         self.server.message('Login successful. Welcome to the server.\n', self.client, self.name)
                         login_running = False
                         password_running = False
@@ -187,10 +204,11 @@ class Client(threading.Thread):
             data = self.receiveData()
             if data == 'y':
                 self.server.message('Creating new user with username "' + username + '". \nEnter your new password: ', self.client, self.name)
-                password = self.receiveData()
+                password = bcrypt.hashpw(self.receiveData().encode(), bcrypt.gensalt())
                 if password:
-                    self.users[username] = password
+                    self.server.users[username] = password
                     self.server.message('User created. Returning to login prompt...', self.client, self.name)
+                    self.server.saveUsers()
                     creatingUser = False
             elif data == 'n':
                 self.server.message('New user creation declined. Returning to login prompt.', self.client, self.name)
@@ -205,10 +223,17 @@ class Client(threading.Thread):
         return data
 
 
+
     ### CLIENT COMMMANDS
 
     def say(self, data):
         self.server.broadcast(data, self.client, self.name)
+
+    def quit(self):
+        self.server.message('Disconnecting...', self.client, self.name)
+        self.client.close()
+        self.server.broadcast(self.name + ' disconnected.', self.client, self.name)
+        self.running = False
 
 if __name__ == "__main__":
     s = Server()
