@@ -1,0 +1,58 @@
+location1:
+    name: Yolorun
+    desc: |
+        The central hub of the kingdom of Litdom. Where the cookies are warm and fresh, 24/7.
+    coor: (0,0)
+
+location2:
+    name: Westside
+    desc: |
+        The westward city of Litdom. Where they bump that firey west-coast hip hop, and where the weather is fair.
+    coor: (-1,0)
+
+location3:
+    name: Edgetown
+    desc: |
+        The westward edge of the world. So much edge that it's cutting you
+        through the screen! Everyone is mean, and they hate cookies. :[
+    coor: (-1,-1)
+
+location4:
+    name: Soufside
+    desc: |
+        The southward city of Litdom, where the food is amazing and the weather makes no sense. :[
+    coor: (-1,0)
+
+location5:
+    name: Edgecity
+    desc: |
+        The eastward edge of the world. The edge is double that of Edgetown! Be
+        careful not to fall off the edge of Litdom, or become an edgelord yourself!
+    coor: (-1,1)
+
+location6:
+    name: Eaztside
+    desc: |
+        The eastward edge of the world, b. It's like, deadstraight the edge of the world!
+        Grab ya timbs, if u bout dat life, fam!
+    coor: (0,1)
+
+location7:
+    name: Chillville
+    desc: |
+        Grab some cookies, milk, and put on some FIRE bangers, cuz here at Chillville,
+        only the CHILLEST of chinchillas are allowed.
+    coor: (1,1)
+
+location8:
+    name: Nawthside
+    desc: |
+        The northern portion of Litdom. It's super duper cold, so bring your jacket!
+    coor: (1,0)
+
+location9:
+    name: Topsiderz
+    desc: |
+        The northwest side of Litdom. The legendary tribe known as the Topsiders live here.
+        It is said that the Topsiders are the most LIT of LIT people in all of Litdom.
+    coor: (1,-1)
