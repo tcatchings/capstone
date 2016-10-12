@@ -13,5 +13,3 @@ class Player:
         print("""Your name is """ + self.name + """, you are currently standing at \n"""
         + self.location + """. \nThis is your current inventory: \n""" + self.items)
 
-x = Player()
-x.status()
