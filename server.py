@@ -12,8 +12,9 @@ import sys
 import threading
 import re
 import logging
+import bcrypt
 
-logging.basicConfig(filename='server.log', level=logging.DEBUG)
+logging.basicConfig(filename='log.log', level=logging.DEBUG)
 
 class Server:
     def __init__(self):
@@ -125,15 +126,17 @@ class Client(threading.Thread):
         self.size = 1024
         self.name = str(address)
         self.commandlist = {'say': self.say}
+        self.users = self.loadUsers()
 
 
     def run(self):
         ''' This method runs the client connection loop. '''
 
+        self.loginPrompt()
+
         running = 1
         while running:
-            data = self.client.recv(self.size)
-            data = data.decode()
+            data = self.receiveData()
 
             if data:
                 print("Data received from " + self.name + ": " + data.strip('\n'))
@@ -156,6 +159,51 @@ class Client(threading.Thread):
                 break
         if matchObj == None:
             self.server.message("There is no such command. ", self.client, self.name)
+
+    def loginPrompt(self):
+        login_running = True
+        password_running = True
+        while login_running:
+            self.server.message('Please enter your username: ', self.client, self.name)
+            username = self.receiveData()
+            pattern = r'' + username 
+            if [key for key, value in self.users.items() if re.search(pattern, key)]: 
+                while password_running:
+                    self.server.message('Password: ', self.client, self.name)
+                    password = self.receiveData()
+                    if password == self.users[username]:
+                        self.server.message('Login successful. Welcome to the server.\n', self.client, self.name)
+                        login_running = False
+                        password_running = False
+                    else: 
+                        self.server.message('Password incorrect.', self.client, self.name)
+            else:
+                self.createUserPrompt(username)
+
+    def createUserPrompt(self, username):
+        self.server.message('This user does not exist. Create new user? (y/n)', self.client, self.name)
+        creatingUser = True
+        while creatingUser:
+            data = self.receiveData()
+            if data == 'y':
+                self.server.message('Creating new user with username "' + username + '". \nEnter your new password: ', self.client, self.name)
+                password = self.receiveData()
+                if password:
+                    self.users[username] = password
+                    self.server.message('User created. Returning to login prompt...', self.client, self.name)
+                    creatingUser = False
+            elif data == 'n':
+                self.server.message('New user creation declined. Returning to login prompt.', self.client, self.name)
+                creatingUser = False
+            else:
+                self.server.message('Input invalid. You must use y or n. ', self.client, self.name)
+
+    def receiveData(self):
+        data = self.client.recv(self.size)
+        data = data.decode()
+        data = data.strip()
+        return data
+
 
     ### CLIENT COMMMANDS
 
