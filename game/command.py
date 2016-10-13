@@ -11,29 +11,29 @@ def commandlist():
     commandlist = {'say': say, 'quit': quit}
     return commandlist
 
-def interpreter(client, clientname, socket, data):
+def interpreter(client, data):
     ''' This method interprets the data received from the client and runs the asscociated command. '''
     for command in client.commandlist:
         commandinput = r"^(" + command + r")(.*)"
         matchObj = re.match(commandinput, data)
         if matchObj:
             if matchObj.group(2): # If the client's command includes an argument.
-                client.commandlist[command](client, clientname, socket, matchObj.group(2))
+                client.commandlist[command](client, matchObj.group(2))
                 break
             else:
-                client.commandlist[command](client, clientname, socket)
+                client.commandlist[command](client)
                 break
     if matchObj == None:
-        client.server.broadcast("There is no such command.", socket, clientname, 'client')
+        client.server.broadcast("There is no such command.", client.client, client.name, 'client')
 
 # COMMANDS
-def say(client, clientname, socket, data):
+def say(client, data):
     ''' This function broadcasts a message to call connected clients. '''
-    client.server.broadcast(data, client, clientname)
+    client.server.broadcast(data, client.client, client.name)
 
-def quit(client, clientname, socket):
+def quit(client):
     ''' This function disconnects the client from the server. '''
-    client.server.broadcast("Disconnecting...", socket, clientname, 'client')
-    socket.close()
-    client.server.broadcast(clientname + " disconnected.", socket, clientname)
+    client.server.broadcast("Disconnecting...", client.client, client.name, 'client')
+    client.client.close()
+    client.server.broadcast(client.name + " disconnected.", client.client, client.name)
     client.running = False

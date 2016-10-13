@@ -133,7 +133,7 @@ class Client(threading.Thread):
             if data:
                 print("Data received from " + self.name +": " + data.strip("\n"))
                 logging.info("Data received from " + self.name + ": " + data.strip("\n"))
-                command.interpreter(self, self.name, self.client, data)
+                command.interpreter(self, data)
             else:
                 self.client.close()
                 print("Client closed: " + str(self.address))
