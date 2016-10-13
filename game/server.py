@@ -11,6 +11,7 @@ import sys
 import threading
 import logging
 import command
+import account
 
 logging.basicConfig(filename="server.log", level=logging.DEBUG)
 
@@ -23,6 +24,7 @@ class Server:
         self.size = 1024
         self.server = None
         self.threads = []
+        self.users = {'brandon': 'password'}
 
     def setport(self):
         ''' This method sets a default port if a port is not provided on the command line. '''
@@ -129,6 +131,8 @@ class Client(threading.Thread):
         ''' This method runs the client connection loop. '''
 
         while self.running:
+            account.login(self)
+
             data = self.receiveData()
             if data:
                 print("Data received from " + self.name +": " + data.strip("\n"))
