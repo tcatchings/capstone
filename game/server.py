@@ -1,4 +1,4 @@
-#!user/bin/env python3.5
+#!usr/bin/python3.5
 """
 This module handles all of the server networking, including
 receiving connections and creating a thread for each client
@@ -10,10 +10,9 @@ import socket
 import sys
 import threading
 import logging
-import re
 import command
 
-logging.basicConfig(filename="logs/server.log", level=logging.DEBUG)
+logging.basicConfig(filename="server.log", level=logging.DEBUG)
 
 class Server:
 
@@ -134,28 +133,13 @@ class Client(threading.Thread):
             if data:
                 print("Data received from " + self.name +": " + data.strip("\n"))
                 logging.info("Data received from " + self.name + ": " + data.strip("\n"))
-                self.interpreter(data)
+                command.interpreter(self, self.name, self.client, data)
             else:
                 self.client.close()
                 print("Client closed: " + str(self.address))
                 logging.info("Client closed: " + str(self.address))
                 self.server.broadcast(self.name + " disconnected.", self.client, self.name)
                 running = False
-
-    def interpreter(self, data):
-        ''' This method interprets the data received from the client. '''
-        for command in self.commandlist:
-            commandinput = r"^(" + command + r")(.*)"
-            matchObj = re.match(commandinput, data)
-            if matchObj:
-                if matchObj.group(2): # If the client's command includes an argument.
-                    self.commandlist[command](self, self.name, self.client, matchObj.group(2))
-                    break
-                else:
-                    self.commandlist[command](self, self.name, self.client)
-                    break
-        if matchObj == None:
-            self.server.broadcast("There is no such command.", self.client, self.name, 'client')
 
     def receiveData(self):
         data = self.client.recv(self.size)
