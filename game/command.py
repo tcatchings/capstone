@@ -2,6 +2,9 @@
 '''
 This module contains all commands usable by the clients.
 '''
+def commandlist():
+    commandlist = {'say': say, 'quit': quit}
+    return commandlist
 
 def say(client, clientname, socket, data):
     client.server.broadcast(data, client, clientname)

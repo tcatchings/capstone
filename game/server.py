@@ -124,7 +124,7 @@ class Client(threading.Thread):
         self.size = 1024
         self.name = str(address)
         self.running = True
-        self.commandlist = {'say': command.say, 'quit': command.quit}
+        self.commandlist = command.commandlist()
 
     def run(self):
         ''' This method runs the client connection loop. '''
