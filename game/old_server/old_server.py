@@ -14,7 +14,6 @@ import re
 import logging
 import bcrypt
 import yaml
-import location
 
 logging.basicConfig(filename='log.log', level=logging.DEBUG)
 
@@ -27,7 +26,6 @@ class Server:
         self.server = None
         self.threads = []
         self.users = self.loadUsers()
-        self.worldmap = self.loadMap()
 
     def setport(self):
         ''' This method sets a default port if a port is not provided on the command line.'''
@@ -160,30 +158,8 @@ class Client(threading.Thread):
         self.commandlist = {
             'say': self.say, 
             'quit': self.quit, 
-            'north': self.move_north, 
-            'south': self.move_south, 
-            'east': self.move_east, 
-            'west': self.move_west
         }
         self.running = True
-        self.x = 1
-        self.y = 2
-
-    def move(self, dx, dy):
-        self.x += dx
-        self.y += dy
-
-    def move_north(self):
-        self.move(dx=0, dy=-1)
-
-    def move_south(self):
-        self.move(dx=0, dy=1)
-
-    def move_east(self):
-        self.move(dx=1, dy=0)
-
-    def move_west(self):
-        self.move(dx=-1, dy=0)
 
 
     def run(self):
@@ -192,8 +168,6 @@ class Client(threading.Thread):
         self.loginPrompt()
 
         while self.running:
-            room = self.server.tileAt(self.x, self.y)
-            self.server.message(room.intro_text(), self.client, self.name)
             data = self.receiveData()
 
             if data:
@@ -235,6 +209,7 @@ class Client(threading.Thread):
                     password = self.receiveData()
                     if bcrypt.checkpw(password, self.server.users[username]):
                         self.server.message('Login successful. Welcome to the server.\n', self.client, self.name)
+                        self.name = username
                         login_running = False
                         password_running = False
                     else: 
