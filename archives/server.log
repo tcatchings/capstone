@@ -1,0 +1,71 @@
+INFO:root:SERVER BEGUN. HOST: localhost PORT: 4000
+INFO:root:New client connected: ('127.0.0.1', 60168)
+INFO:root:Data received from ('127.0.0.1', 60168): hi
+INFO:root:Server shutdown request received from server. Shutting down once all clients disconnect.
+INFO:root:SERVER BEGUN. HOST: localhost PORT: 4001
+INFO:root:New client connected: ('127.0.0.1', 46944)
+INFO:root:Data received from ('127.0.0.1', 46944): hi
+INFO:root:Sending message to ('127.0.0.1', 46944): There is no such command.
+INFO:root:Sending message to ('127.0.0.1', 46944): There is no such command.
+INFO:root:Data received from ('127.0.0.1', 46944): hello
+INFO:root:Sending message to ('127.0.0.1', 46944): There is no such command.
+INFO:root:Sending message to ('127.0.0.1', 46944): There is no such command.
+INFO:root:Data received from ('127.0.0.1', 46944): say hi
+INFO:root:Sending message to all clients: ('127.0.0.1', 46944):  hi
+INFO:root:SERVER BEGUN. HOST: localhost PORT: 4002
+INFO:root:New client connected: ('127.0.0.1', 35027)
+INFO:root:Data received from ('127.0.0.1', 35027): hi
+INFO:root:Sending message to ('127.0.0.1', 35027): There is no such command.
+INFO:root:Data received from ('127.0.0.1', 35027): say hi
+INFO:root:Sending message to all clients: ('127.0.0.1', 35027):  hi
+INFO:root:Data received from ('127.0.0.1', 35027): quit
+INFO:root:Sending message to ('127.0.0.1', 35027): Disconnecting...
+INFO:root:Sending message to all clients: ('127.0.0.1', 35027): ('127.0.0.1', 35027) disconnected.
+ERROR:root:Error broadcasting message to ('127.0.0.1', 35027). Closing socket.
+INFO:root:Server shutdown request received from server. Shutting down once all clients disconnect.
+INFO:root:SERVER BEGUN. HOST: localhost PORT: 4000
+INFO:root:New client connected: ('127.0.0.1', 36112)
+INFO:root:Data received from ('127.0.0.1', 36112): hi
+INFO:root:SERVER BEGUN. HOST: localhost PORT: 4000
+INFO:root:New client connected: ('127.0.0.1', 36806)
+INFO:root:Data received from ('127.0.0.1', 36806): hi
+INFO:root:Sending message to ('127.0.0.1', 36806): There is no such command.
+INFO:root:Data received from ('127.0.0.1', 36806): say hi
+INFO:root:Sending message to all clients: ('127.0.0.1', 36806):  hi
+INFO:root:Data received from ('127.0.0.1', 36806): quit
+INFO:root:Sending message to ('127.0.0.1', 36806): Disconnecting...
+INFO:root:Sending message to all clients: ('127.0.0.1', 36806): ('127.0.0.1', 36806) disconnected.
+ERROR:root:Error broadcasting message to ('127.0.0.1', 36806). Closing socket.
+INFO:root:SERVER BEGUN. HOST: localhost PORT: 4000
+INFO:root:New client connected: ('127.0.0.1', 45172)
+INFO:root:Server shutdown request received from server. Shutting down once all clients disconnect.
+INFO:root:SERVER BEGUN. HOST: localhost PORT: 4001
+INFO:root:Sending message to all clients: ('127.0.0.1', 59948): Please enter your username:
+INFO:root:New client connected: ('127.0.0.1', 59948)
+INFO:root:Server shutdown request received from server. Shutting down once all clients disconnect.
+INFO:root:SERVER BEGUN. HOST: localhost PORT: 4002
+INFO:root:Sending message to all clients: ('127.0.0.1', 48547): Please enter your username:
+INFO:root:New client connected: ('127.0.0.1', 48547)
+INFO:root:Sending message to all clients: ('127.0.0.1', 48547): This user does not exists. Create new user? (y/n)
+INFO:root:Server shutdown request received from server. Shutting down once all clients disconnect.
+INFO:root:SERVER BEGUN. HOST: localhost PORT: 4000
+INFO:root:Sending message to all clients: ('127.0.0.1', 46974): Please enter your username:
+INFO:root:New client connected: ('127.0.0.1', 46974)
+INFO:root:Sending message to all clients: ('127.0.0.1', 46974): This user does not exists. Create new user? (y/n)
+INFO:root:Sending message to all clients: ('127.0.0.1', 46974): Creating new user with username 'hi'. 
+Enter your new password:
+INFO:root:Server shutdown request received from server. Shutting down once all clients disconnect.
+INFO:root:SERVER BEGUN. HOST: localhost PORT: 4000
+INFO:root:Sending message to all clients: ('127.0.0.1', 47634): Please enter your username:
+INFO:root:New client connected: ('127.0.0.1', 47634)
+INFO:root:Sending message to all clients: ('127.0.0.1', 47634): This user does not exists. Create new user? (y/n)
+INFO:root:Sending message to all clients: ('127.0.0.1', 47634): Creating new user with username 'hi'. 
+Enter your new password:
+INFO:root:Server shutdown request received from server. Shutting down once all clients disconnect.
+INFO:root:SERVER BEGUN. HOST: localhost PORT: 4000
+INFO:root:Sending message to all clients: ('127.0.0.1', 48884): Please enter your username:
+INFO:root:New client connected: ('127.0.0.1', 48884)
+INFO:root:Sending message to all clients: ('127.0.0.1', 48884): This user does not exists. Create new user? (y/n)
+INFO:root:Sending message to all clients: ('127.0.0.1', 48884): Creating new user with username 'hi'. 
+Enter your new password:
+INFO:root:Sending message to all clients: ('127.0.0.1', 48884): User created. Returning to login prompt...

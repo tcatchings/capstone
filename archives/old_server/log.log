@@ -1,0 +1,47 @@
+INFO:root:SERVER BEGUN. HOST: localhost PORT: 4000
+INFO:root:Sending message to ('127.0.0.1', 50580): Please enter your username: 
+INFO:root:New client connected: ('127.0.0.1', 50580)
+INFO:root:Sending message to ('127.0.0.1', 50580): This user does not exist. Create new user? (y/n)
+INFO:root:Sending message to ('127.0.0.1', 50580): Creating new user with username "michael". 
+Enter your new password: 
+INFO:root:Sending message to ('127.0.0.1', 50580): User created. Returning to login prompt...
+INFO:root:Sending message to ('127.0.0.1', 50580): Please enter your username: 
+INFO:root:Sending message to ('127.0.0.1', 50580): Password: 
+INFO:root:Sending message to ('127.0.0.1', 50580): Login successful. Welcome to the server.
+INFO:root:Server shutdown request received from server. Shutting down once all clients disconnect.
+INFO:root:SERVER BEGUN. HOST: localhost PORT: 4001
+INFO:root:SERVER BEGUN. HOST: localhost PORT: 4002
+INFO:root:Sending message to ('127.0.0.1', 54141): Please enter your username: 
+INFO:root:New client connected: ('127.0.0.1', 54141)
+INFO:root:Sending message to ('127.0.0.1', 54141): This user does not exist. Create new user? (y/n)
+INFO:root:Sending message to ('127.0.0.1', 54141): Creating new user with username "tristan". 
+Enter your new password: 
+INFO:root:Sending message to ('127.0.0.1', 54141): User created. Returning to login prompt...
+INFO:root:Sending message to ('127.0.0.1', 54141): Please enter your username: 
+INFO:root:Sending message to ('127.0.0.1', 54141): Password: 
+INFO:root:Sending message to ('127.0.0.1', 54141): Login successful. Welcome to the server.
+INFO:root:Data received from ('127.0.0.1', 54141): say hi
+INFO:root:Sending message to all clients: ('127.0.0.1', 54141):  hi
+INFO:root:Data received from ('127.0.0.1', 54141): say hello
+INFO:root:Sending message to all clients: ('127.0.0.1', 54141):  hello
+INFO:root:Data received from ('127.0.0.1', 54141): say how are you
+INFO:root:Sending message to all clients: ('127.0.0.1', 54141):  how are you
+INFO:root:Data received from ('127.0.0.1', 54141): quit
+INFO:root:Sending message to ('127.0.0.1', 54141): Disconnecting...
+INFO:root:Sending message to all clients: ('127.0.0.1', 54141): ('127.0.0.1', 54141) disconnected.
+ERROR:root:Error broadcasting message from ('127.0.0.1', 54141). Closing socket.
+INFO:root:Server shutdown request received from server. Shutting down once all clients disconnect.
+INFO:root:SERVER BEGUN. HOST: localhost PORT: 4000
+INFO:root:Sending message to ('127.0.0.1', 52629): Please enter your username: 
+INFO:root:New client connected: ('127.0.0.1', 52629)
+INFO:root:Sending message to ('127.0.0.1', 52629): Password: 
+INFO:root:Sending message to ('127.0.0.1', 52629): Login successful. Welcome to the server.
+INFO:root:Data received from tristan: say hi
+INFO:root:Sending message to all clients: tristan:  hi
+INFO:root:Data received from tristan: say how are you dog
+INFO:root:Sending message to all clients: tristan:  how are you dog
+INFO:root:Data received from tristan: quit
+INFO:root:Sending message to tristan: Disconnecting...
+INFO:root:Sending message to all clients: tristan: tristan disconnected.
+ERROR:root:Error broadcasting message from tristan. Closing socket.
+INFO:root:Server shutdown request received from server. Shutting down once all clients disconnect.
